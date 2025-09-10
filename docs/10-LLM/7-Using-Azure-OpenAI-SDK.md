@@ -4,252 +4,132 @@
 Azure OpenAI SDK is a set of libraries that allow you to interact with Azure OpenAI services from your code. The SDK are available for multiple programming languages, including Python, Node.js, and C#.
 :::
 
-In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azure OpenAI services from your code using Node.js.
+In this lab, you will learn how to use the Azure OpenAI SDK to interact with Azure OpenAI services from your code using Node.js. We've prepared ready-to-run examples that you can execute and modify.
 
-## Setup Node.js project
+## Quick Start
 
-1. Open a new `Terminal` window in VS code. 
-
-![alt text](images/openterminal.png)
-
-2. **Create** a new directory `labs/10-LAB-01/7-Using-Azure-OpenAI-SDK/openai-nodejs` and navigate to the directory.
+1. Open a new `Terminal` window in VS code and navigate to the lab directory:
 
 ```bash
 cd labs/10-LAB-01/7-Using-Azure-OpenAI-SDK
-mkdir openai-nodejs
-cd openai-nodejs
 ```
-![alt text](images/creatfolder.png)
 
-3. Run the following command to create a new Node.js project:
+2. Install the dependencies:
 
 ```bash
-npm init -y
+npm install
 ```
 
-4. When integrating Azure OpenAI service in a solution written in Node.js, the OpenAI NPM client library is used.
-   Install the latest openai client library using `npm`:
+:::warning Package Version
+The `@azure/openai` package used in this lab is a beta version. For production applications, consider using the stable OpenAI SDK with Azure OpenAI support. This lab uses the beta version for educational purposes.
+:::
+
+3. **Configure your Azure OpenAI credentials:**
+   - Copy `config-template.js` to `config.js` and update with your credentials, OR
+   - Edit the endpoint and API key directly in each JavaScript file
+
+:::info
+Azure OpenAI service endpoint is in the format `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`. 
+If unsure about your instance name, refer to the `Lab Setup` documentation.
+:::
+
+4. **Run the basic example:**
 
 ```bash
-npm install @azure/openai@1.0.0-beta.11
+npm run basic
+# or alternatively: node 01-basic-completion.js
 ```
 
-5. Locate `openai-nodejs` folder in VS code `Explorer`. Create a new `app.js` file for the Node.js program using the `+` icon or `File -> New Text File -> Save`. Then add the following variable definition to the `app.js` file using `require` to use the OpenAI library.
-
-```javascript
-const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
-```
-
-6. Create the Azure OpenAI client to call the Azure OpenAI Chat completion API. Have a look at Azure OpenAI service endpoint and Azure OpenAI service key in the code below. Please copy below Javascript code into `app.js` below earlier block.
-
-```javascript
-  const client = new OpenAIClient(
-    "https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/",
-    new AzureKeyCredential("<AZURE_OPENAI_API_KEY>")
-  );
-```
-
-7. Please edit the placeholder string to the right value. Azure OpenAI service endpoint is in the format of `https://<AZURE_OPENAI_API_INSTANCE_NAME>.openai.azure.com/`, for example, `https://arg-syd-aiaaa-openai.openai.azure.com`. If not sure about the value of AZURE_OPENAI_API_INSTANCE_NAME, please refer to `Lab Setup` step.
+You should see a response from the Azure OpenAI service about different types of road bikes.
 
 :::info
 More information on the Azure OpenAI client methods can be found in the [@azure/openai package](https://learn.microsoft.com/en-us/javascript/api/%40azure/openai/?view=azure-node-preview) documentation. 
 :::
 
-8. Once the Azure OpenAI client has been created, the next step is to call the `.getCompletions` method on the client to perform a chat completion.
+## Example 1: Basic Chat Completion
 
-```javascript
-// Block Reference 1
-const chatResponse = client.getChatCompletions("completions", [
-  { role: "user", content: "What are the different types of road bikes?" },
-]);
+The `01-basic-completion.js` file demonstrates a simple chat completion:
+
+```bash
+npm run basic
 ```
 
-9. Print the response from Azure OpenAI to the console.
+This example shows how to:
+- Import the Azure OpenAI client
+- Create a client instance with your credentials
+- Send a basic user message
+- Process and display the response
 
-```javascript
-// Block Reference 2
-chatResponse
-  .then((result) => {
-    for (const choice of result.choices) {
-      console.log(choice.message.content);
-    }
-  })
-  .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
+## Example 2: System Message
+
+The `02-system-message.js` file demonstrates how to use system messages to set the AI's behavior and personality:
+
+```bash
+npm run system
 ```
 
-10. Open terminal window in VS code, and run below command. You should see the response from the Azure OpenAI service in the console.
+This example shows how to:
+- Set a system message to define the AI's role
+- Create a more conversational and contextual response
+- Guide the AI to behave as a specific type of assistant
 
-```
-node app.js
-```
+**Key concept:** System messages help establish the AI's persona and instructions before the conversation begins.
 
-Try the other examples in the next sections to see how you can interact with Azure OpenAI models from your code.
+## Example 3: Conversation History
 
-## System Message
+The `03-conversation-history.js` file demonstrates how to maintain context across multiple turns:
 
-You can set the system message to provide context to the conversation. The system message can be set using the `role: "system"`. If you see an error saying `variable already exists or defined`, please replace the previous code block `Block Reference 1` with new code block below.
-
-```javascript
-// Block Reference 1
-const chatResponse = client.getChatCompletions("completions", [
-  {
-    role: "system",
-    content:
-      "You are a helpful, fun and friendly sales assistant for Contoso Bike Store, a bicycle and bicycle accessories store.",
-  },
-  { role: "user", content: "Do you sell bicycles?" },
-]);
+```bash
+npm run conversation
 ```
 
-## Conversation History
+This example shows how to:
+- Include previous messages in the conversation
+- Build context over multiple exchanges
+- Create more natural, flowing conversations
 
-You can send previous chat history to the model as part of the conversation. This can help the model provide more accurate responses. Replace the previous code block `Block Reference 1` in earlier step with new code block below.
+**Key concept:** LLMs are stateless, so you must explicitly provide conversation history to maintain context.
 
-```javascript
-// Block Reference 1
-const chatResponse = client.getChatCompletions("completions", [
-  {
-    role: "system",
-    content:
-      "You are a helpful, fun and friendly sales assistant for Contoso Bike Store, a bicycle and bicycle accessories store.",
-  },
-  { role: "user", content: "Do you sell bicycles?" },
-  {
-    role: "assistant",
-    content:
-      "Yes, we do sell bicycles. What kind of bicycle are you looking for?",
-  },
-  {
-    role: "user",
-    content: "I'm not sure what I'm looking for. Could you help me decide?",
-  },
-]);
+## Example 4: Function Calling
+
+The `04-function-calling.js` file demonstrates advanced function calling capabilities:
+
+```bash
+npm run function
 ```
 
-## Function Calling
+This example shows how to:
+- Define functions that the AI can call
+- Handle tool responses
+- Create interactive applications where the AI can perform actions
 
-You can call a function from the model to perform a specific task. The available functions are passed to the model. The model analyzes the conversation history and decides when and how to call the function. The model also extracts the required parameters for the function from the conversation history.
-
-In the following example, the model calls the `search_bike` function to retrieve bikes from the search index based on the location, company, and model of the bike. 
-
-1. Add the function `searchBikeStore` in `app.js` file below `const client = new OpenAIClient` code block.
-
-```javascript
-const searchBikeStore = {
-  name: "search_bike",
-  description: "Retrieves bikes from the search index based",
-  parameters: {
-    type: "object",
-    properties: {
-      location: {
-        type: "string",
-        description: "The location of the store (i.e. Seattle, WA)",
-      },
-      company: {
-        type: "string",
-        description: "The company of the bike",
-      },
-      model: {
-        type: "string",
-        description: "The model of the bike",
-      },
-    },
-    required: ["location"],
-  },
-};
-
-const options = {
-    tools: [
-        {
-            type: "function",
-            function: searchBikeStore,
-        },
-    ],
-};
-
-```
-
-2. Call the chat completions API, by passing the `searchBikeStore` function. Replace the previous code block `Block Reference 1` in earlier step with new code block below.
-
-```javascript
-// Block Reference 1
-const chatResponse = client.getChatCompletions("completions", [
-    {
-        role: "system",
-        content:
-            "You are a helpful, fun and friendly sales assistant for Contoso Bike Store, a bicycle and bicycle accessories store.",
-    },
-    {
-        role: "user",
-        content:
-            "I'm looking for a bike in Seattle store. Can you help me find a bike from Trek company and model Domane SLR 9?",
-    },
-], options);
-```
-
-3. The response message includes one or more `tool calls` that must be resolved via `tool messages`. Add the following function to handle the request from the model to invoke the function below `const chatResponse = client.getChatCompletions` code block.
-
-```javascript
-// Purely for convenience and clarity, this function handles tool call responses.
-function applyToolCall({ function: call, id }) {
-    if (call.name === "search_bike") {
-        console.log('[applyToolCall] invoked');
-        const { location, company, model } = JSON.parse(call.arguments);
-        // In a real application, this would be a call an external service or database.
-        return {
-            role: "tool",
-            content: `The bike from ${company} company and model ${model} is available in ${location} store.`,
-            toolCallId: id,
-        };
-    }
-    throw new Error(`Unknown tool call: ${call.name}`);
-}
-```
-
-4. Print the final response from the tool call to the console. In some cases, you may need to send the response from the tool back to the model along with the original conversation history to get the final response. Replace the previous code block `Block Reference 2` in earlier step with new code block below.
-
-```javascript
-// Block Reference 2
-chatResponse
-    .then(async (result) => {
-
-        console.log('[chatResponse]:' + JSON.stringify(result));
-        console.log('')
-        console.log('[chatResponse][Message]:' + JSON.stringify(result.choices[0].message));
-        console.log('')
-
-        for (const choice of result.choices) {
-            const responseMessage = choice.message;
-
-            if (responseMessage?.role === "assistant") {
-                const requestedToolCalls = responseMessage?.toolCalls;
-                if (requestedToolCalls?.length) {
-                    const toolCallResolutionMessages = [
-                        responseMessage,
-                        ...requestedToolCalls.map(applyToolCall),
-                    ];
-
-                    console.log('[toolCallResolutionMessages]:' + JSON.stringify(toolCallResolutionMessages));
-                    console.log('')
-
-                    const result = await client.getChatCompletions('completions', toolCallResolutionMessages);
-                    console.log('[chatResponse_with_toolcall]:' + JSON.stringify(result));
-                    console.log('')
-                    console.log('[chatResponse_with_toolcall][Message]:' + JSON.stringify(result.choices[0].message));
-                    console.log('')
-                }
-            }
-        }
-    })
-    .catch((err) => console.log(`Error: ${JSON.stringify(err)}`));
-```
-
-5. Run below command to execute the code.
-
-```
-node app.js
-```
+**Key concept:** Function calling allows the AI to use external tools and services, extending its capabilities beyond text generation.
 
 :::tip
-Where do you think the actual `applyToolCall` execution is? on the server-side or client-side?
+Where do you think the actual `applyToolCall` execution happens? On the server-side or client-side?
+
+Answer: Client-side! The AI decides when to call a function and what parameters to use, but the actual function execution happens in your application code.
 :::
+
+## Understanding the Code Structure
+
+All the example files follow a similar pattern:
+
+1. **Import and Setup**: Import the Azure OpenAI client and create an instance
+2. **Define the Request**: Set up the messages and any options (like function definitions)
+3. **Make the API Call**: Send the request to Azure OpenAI
+4. **Handle the Response**: Process the result and display or use the output
+
+You can modify any of the examples to experiment with different:
+- System messages and personas
+- User prompts and questions
+- Function definitions and responses
+- Error handling approaches
+
+## Next Steps
+
+Try modifying the examples:
+- Change the system messages to create different AI personas
+- Add your own functions to the function calling example
+- Experiment with different conversation flows
+- Add error handling and validation

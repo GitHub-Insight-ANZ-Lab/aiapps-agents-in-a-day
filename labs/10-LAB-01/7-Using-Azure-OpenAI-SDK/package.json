@@ -1,0 +1,18 @@
+{
+  "name": "azure-openai-sdk-lab",
+  "version": "1.0.0",
+  "description": "Azure OpenAI SDK Lab exercises",
+  "main": "01-basic-completion.js",
+  "scripts": {
+    "basic": "node 01-basic-completion.js",
+    "system": "node 02-system-message.js",
+    "conversation": "node 03-conversation-history.js",
+    "function": "node 04-function-calling.js"
+  },
+  "keywords": ["azure", "openai", "sdk", "lab"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/openai": "^1.0.0-beta.11"
+  }
+}
