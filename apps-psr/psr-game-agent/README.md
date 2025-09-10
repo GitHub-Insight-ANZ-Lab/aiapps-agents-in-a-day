@@ -89,6 +89,48 @@ AZURE_AI_KEY=your-azure-ai-api-key-here
    - Display all actions in real-time
 3. **View Results**: See final scores and round details when tournament completes
 
+## Agent Versions
+
+### agent_v1.py (Basic Azure AI Agent)
+- Basic question answering using Azure AI
+- Simple RPS move selection
+- Core tournament participation logic
+
+### agent_v57.py (Planning-Enhanced Agent)
+**NEW: Advanced planning capabilities following the Planning Design pattern**
+
+Features include:
+- **Tournament Goal Decomposition**: Breaks down tournament objectives into actionable subtasks
+- **Question Strategy Planning**: Analyzes questions and plans optimal answering strategies
+- **RPS Strategy Planning**: Strategic move selection based on game theory and opponent analysis
+- **Iterative Planning**: Adapts strategies based on tournament results and feedback
+- **Pattern Learning**: Learns from question types and opponent behaviors
+- **Structured Output**: Uses Pydantic models for consistent, validated planning data
+
+Planning capabilities:
+```python
+from agent_v57 import GameAgentV57
+
+agent = GameAgentV57()
+
+# Create tournament plan
+plan = agent.create_tournament_plan("Win PSR Championship")
+
+# Plan question strategy
+strategy = agent.plan_question_strategy("What is 25 + 17?")
+
+# Plan RPS move strategy  
+rps_strategy = agent.plan_rps_strategy(round_number=1)
+
+# Update plans based on results
+agent.update_plan_based_on_results(question_result=True, rps_result="win", round_number=1)
+```
+
+Testing the planning agent:
+```bash
+python test_agent_v57.py
+```
+
 ## Agent Behavior
 
 ### Question Answering Logic
@@ -131,11 +173,18 @@ To test the complete flow:
 
 ## Architecture
 
+### Core Files
 - **app.py**: Flask web application with routes and UI
 - **agent.py**: Core autonomous game logic and monitoring
+- **agent_v1.py**: Basic Azure AI agent implementation
+- **agent_v57.py**: Planning-enhanced agent with strategic capabilities
 - **api_client.py**: HTTP client for server communication
 - **templates/index.html**: Responsive web interface
 - **requirements.txt**: Python dependencies
+
+### Testing Files
+- **test_agent.py**: Basic agent functionality tests
+- **test_agent_v57.py**: Comprehensive planning feature tests
 
 ## Troubleshooting
 
