@@ -43,3 +43,6 @@ instance/
 # OS
 .DS_Store
 Thumbs.db
+
+# Agent history files (runtime data)
+game_history_*.json
