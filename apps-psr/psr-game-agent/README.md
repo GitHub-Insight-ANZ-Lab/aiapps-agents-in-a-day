@@ -89,6 +89,49 @@ AZURE_AI_KEY=your-azure-ai-api-key-here
    - Display all actions in real-time
 3. **View Results**: See final scores and round details when tournament completes
 
+## Agent Versions
+
+This repository contains multiple agent implementations demonstrating different AI concepts:
+
+### agent_v1.py
+- **Basic Azure AI Agent**: Foundation agent with Azure AI integration and fallback logic
+- **Features**: Question answering, RPS move selection, error handling
+- **Use Case**: Standard autonomous gameplay
+
+### agent_v67.py - **Trustworthy AI Agent with Human-in-the-Loop** 🛡️
+- **Human Oversight**: Implements human-in-the-loop decision making based on lesson 67
+- **Safety Features**: Built-in safety checks and validation
+- **Interactive Mode**: Human can approve, modify, or reject AI decisions in real-time
+- **Transparency**: Complete logging and tracking of all decisions
+- **Use Case**: Trustworthy AI applications requiring human oversight
+
+#### Key Features of agent_v67.py:
+- ✅ **Human Approval Workflow**: Every AI decision can be reviewed by a human
+- ✅ **Safety Validation**: Automatic detection of suspicious or malicious content
+- ✅ **Termination Control**: Human can stop the process at any time
+- ✅ **Decision Tracking**: Complete audit trail of approved/rejected decisions
+- ✅ **Override Capability**: Human can provide their own answers/moves
+- ✅ **Backward Compatibility**: Same interface as agent_v1.py
+
+#### Using the Trustworthy Agent:
+```bash
+# Run interactive demo
+python demo_agent_v67.py
+
+# Run comprehensive tests
+python test_agent_v67.py
+
+# Use in your code
+from agent_v67 import GameAgentV67
+agent = GameAgentV67(interactive_mode=True)  # Enable human oversight
+```
+
+### Other Agent Versions
+- **agent_v2_tool_use.py**: Tool use and function calling
+- **agent_v3_agentic_rag.py**: Agentic RAG implementation  
+- **agent_v4_multi_agent.py**: Multi-agent collaboration
+- **agent_v5_agentic_protocols.py**: Advanced agentic protocols
+
 ## Agent Behavior
 
 ### Question Answering Logic
