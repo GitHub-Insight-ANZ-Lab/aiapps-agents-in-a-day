@@ -167,9 +167,10 @@ app.post('/register', async (req, res) => {
             isRegistered: true,
             currentRound: 0,
             tournamentStatus: 'Pending',
-            roundStatus: null,
+            currentRoundStatus: null,
             currentQuestion: '',
             gameActive: false,
+            canSubmit: false,
             results: []
         };
         
@@ -231,9 +232,10 @@ app.post('/reconnect', async (req, res) => {
             isRegistered: true,
             currentRound: status.currentRound || 0,
             tournamentStatus: status.tournamentStatus || 'Pending',
-            roundStatus: status.currentRoundStatus,
+            currentRoundStatus: status.currentRoundStatus,
             currentQuestion: status.currentQuestion || '',
             gameActive: status.tournamentStatus === 1,
+            canSubmit: status.canSubmit || false,
             results: []
         };
         
@@ -280,9 +282,10 @@ app.get('/status', (req, res) => {
             playerName: '',
             tournamentStatus: 0,
             currentRound: 0,
-            roundStatus: null,
+            currentRoundStatus: null,
             currentQuestion: '',
-            gameActive: false
+            gameActive: false,
+            canSubmit: false
         });
     }
 });
@@ -398,11 +401,12 @@ function startGameMonitoring(sessionId) {
             // Update session state
             sessionState.tournamentStatus = status.tournamentStatus;
             sessionState.currentRound = status.currentRound;
-            sessionState.roundStatus = status.currentRoundStatus;
+            sessionState.currentRoundStatus = status.currentRoundStatus;
             sessionState.currentQuestion = status.currentQuestion;
             sessionState.gameActive = status.tournamentStatus === 1; // InProgress
+            sessionState.canSubmit = status.canSubmit; // Add missing canSubmit property
 
-            console.log(`Session ${sessionIdStr}: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}`);
+            console.log(`Session ${sessionIdStr}: Tournament=${status.tournamentStatus}, Round=${status.currentRound}, RoundStatus=${status.currentRoundStatus}, CanSubmit=${status.canSubmit}`);
 
             // Note: We removed the auto-submission logic here
             // The client will now manually submit through the confirmation popup

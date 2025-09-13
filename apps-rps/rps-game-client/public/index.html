@@ -436,6 +436,14 @@
         }
 
         function updateGameDisplay(status) {
+            // Debug logging
+            console.log('updateGameDisplay called with status:', {
+                gameActive: status.gameActive,
+                currentRoundStatus: status.currentRoundStatus,
+                canSubmit: status.canSubmit,
+                currentQuestion: status.currentQuestion
+            });
+            
             // Tournament status
             const tournamentStatusText = TournamentStatus[status.tournamentStatus] || 'Unknown';
             document.getElementById('tournament-status').innerHTML = 
