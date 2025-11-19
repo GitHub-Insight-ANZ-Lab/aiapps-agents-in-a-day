@@ -9,14 +9,30 @@ const { OpenAIEmbeddings } = require("@langchain/openai");
 
 const dbClient = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
 var dbname = process.env.MONGODB_Name;
-// set up the Azure Cosmos DB vector store using the initialized MongoDB client
+const azureCosmosDBConfig = {
+    client: dbClient,
+    databaseName: dbname,
+    collectionName: "products",
+    indexName: "VectorSearchIndex",
+    embeddingKey: "contentVector",
+    textKey: "_id",
+};
+const vectorStore = new AzureCosmosDBVectorStore(
+    new OpenAIEmbeddings(),
+    azureCosmosDBConfig
+);
 
 
 async function main() {
     try {
         await dbClient.connect();
         console.log("Connected to MongoDB");
-        // perform a vector search using the vector store
+        const results = await vectorStore.similaritySearch(
+            "What yellow products do you have?",
+            AzureCosmosDBSimilarityType.CosineSimilarity,
+            3
+        );
+        console.log(results);
 
 
     } catch (err) {
