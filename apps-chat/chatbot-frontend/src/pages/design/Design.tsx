@@ -4,7 +4,6 @@ import { usePromiseTracker } from "react-promise-tracker";
 import { OpenAIClient, AzureKeyCredential, Completions } from '@azure/openai';
 
 const Page = () => {
-
     const { promiseInProgress } = usePromiseTracker();
     const [imageText, setImageText] = useState<string>();
     const [imageUrl, setImageUrl] = useState<string>("");
@@ -15,14 +14,31 @@ const Page = () => {
                 dalleApi(imageText)
             ).then((res) => {
                 setImageUrl(res);
-            }
-            )
+            })
         }
     }
 
     async function dalleApi(prompt: string): Promise<string> {
-        // todo
-        return "";
+        const size = '1024x1024';
+        const n = 1;
+        
+        var openai_url = "https://aiaaa-s2-openai.openai.azure.com/";
+        var openai_key = "<YOUR_AZURE_OPENAI_KEY_HERE>";
+        const client = new OpenAIClient(
+            openai_url,
+            new AzureKeyCredential(openai_key),
+            { apiVersion: "2024-02-01" }
+        );
+
+        const deploymentName = 'dalle3';
+        const result = await client.getImages(deploymentName, prompt, { n, size });
+        console.log(result);
+
+        if (result.data[0].url) {
+            return result.data[0].url;
+        } else {
+            throw new Error("Image URL is undefined");
+        }
     }
 
     const updateText = (e: React.ChangeEvent<HTMLInputElement>) => {
