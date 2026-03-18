@@ -2,7 +2,7 @@
 
 Microsoft Agent Framework is an SDK for building production-ready AI agents in application code. It gives you a consistent programming model for providers, sessions, tools, and orchestration.
 
-For this lab, the sample in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py` runs a console agent against Azure OpenAI Responses through Agent Framework using Entra ID credentials.
+For this lab, the sample in `labs/40-AIAgents/ms-agent-framework/game_agent_v3_maf.py` runs a console agent against Azure OpenAI Responses through Agent Framework using Entra ID credentials.
 
 ## What It Is (and Is Not)
 
@@ -89,10 +89,10 @@ This is the minimum production-relevant pattern: one configured agent, one persi
 
 ## Create Microsoft Agent Framework Agent
 
-- navigate to `labs/40-AIAgents/ms-agent-foundry`.
+- navigate to `labs/40-AIAgents/ms-agent-framework`.
 
 ```bash
-cd labs/40-AIAgents/ms-agent-foundry
+cd labs/40-AIAgents/ms-agent-framework
 ```
 
 - Create and activate a virtual environment.
@@ -177,7 +177,7 @@ Research validation: Agent Framework supports tool-enabled agents in code (offic
 
 Use this extension to let learners add helper functions for math and game resolution.
 
-Paste this snippet at marker `INSERT-TOOLS-HERE` in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py`.
+Paste this snippet at marker `INSERT-TOOLS-HERE` in `labs/40-AIAgents/ms-agent-framework/game_agent_v3_maf.py`.
 
 ```python
 from random import choice
@@ -224,7 +224,7 @@ After pasting, prompts like `Use evaluate_rps with my move scissors` can trigger
 
 Research validation: `create_session()` and reusing `session=` in `run(...)` are supported and already used by this sample.
 
-Paste this snippet at marker `INSERT-SESSION-CONTINUITY-HERE` in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py`.
+Paste this snippet at marker `INSERT-SESSION-CONTINUITY-HERE` in `labs/40-AIAgents/ms-agent-framework/game_agent_v3_maf.py`.
 
 ```python
 active_session_id = 1
@@ -244,7 +244,7 @@ Then replace the existing session initialization line with:
 session = new_session()
 ```
 
-Paste this snippet at marker `INSERT-NEW-SESSION-TOOL-HERE` in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py`.
+Paste this snippet at marker `INSERT-NEW-SESSION-TOOL-HERE` in `labs/40-AIAgents/ms-agent-framework/game_agent_v3_maf.py`.
 
 ```python
 restart_requested = False
@@ -263,7 +263,7 @@ agent = client.as_agent(
 )
 ```
 
-Paste this snippet at marker `INSERT-NEW-SESSION-RESTART-HOOK-HERE` in `labs/40-AIAgents/ms-agent-foundry/game_agent_v3_maf.py`.
+Paste this snippet at marker `INSERT-NEW-SESSION-RESTART-HOOK-HERE` in `labs/40-AIAgents/ms-agent-framework/game_agent_v3_maf.py`.
 
 ```python
 if restart_requested:
